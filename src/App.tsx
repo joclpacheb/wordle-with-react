@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./app.scss";
+import "./styles.scss";
+import InputContainer from "./components/InputContainer";
+import GameGrid from "./components/GameGrid";
+import GameStatusMessage from "./components/GameStatusMessage";
 /*
 Wordle
 ------
@@ -22,7 +25,7 @@ const WORD_LENGTH = 5;
 // TODO: Implement GameState (typescript)
 // interface GameState { }
 
-const WordleGame: React.FC = () => { // (typescript syntax)
+const WordleGame: React.FC = () => {
   const [currentInput, setCurrentInput] = useState("");
   const [answerWord, setAnswerWord] = useState(""); // State for the chosen answer word
   const [activeRow, setActiveRow] = useState(0);
@@ -142,62 +145,27 @@ const WordleGame: React.FC = () => { // (typescript syntax)
     <div className="wordle">
       <h1>Wordle</h1>
 
-
       {/* Game Grid */}
       {gameOver === false && gameWon == false && (
         <div className="grid-wrapper">
-          <div className="inputs-container">
-            {/* Validation: accepting input that has n°(WORD_LENGTH) letters only from the player */}
-            <input
-              className="input-box"
-              type="text"
-              maxLength={WORD_LENGTH}
-              pattern="[a-zA-Z]*"
-              value={currentInput}
-              onChange={(e) => {
-                const inputValue = e.target.value.replace(/[^a-zA-Z]/g, '');
-                setCurrentInput(inputValue.toUpperCase()); // Validation: Converting user-typed word to uppercase  
-              }}
-            />
-            <button onClick={handleEvaluateClick}>EVALUATE</button>
-          </div>
-          <div className="grid">
-            {gridData.map((row, attemptIndex) => (
-              <div key={attemptIndex} className="row">
-                {row.map((cell, letterIndex) => (
-                  <div
-                    key={letterIndex}
-                    className={`cell ${cell.status}`} // Applying correct/incorrect styling for the cell backgrounds
-                  >
-                    {cell.letter}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+          <InputContainer
+            currentInput={currentInput}
+            setCurrentInput={setCurrentInput}
+            handleEvaluateClick={handleEvaluateClick}
+            WORD_LENGTH={WORD_LENGTH} />
 
+          <GameGrid gridData={gridData} />
         </div>
-
       )
 
-
       }
-
       {/* Game Won/Game Over messages */}
-      {gameWon && (
-        <div className="game-won">
-          <h2>You Win!</h2>
-          <p>You guessed the right word: {answerWord}.</p>
-          <button onClick={resetGame}>Play Again</button>
-        </div>
-      )}
-      {gameOver && (
-        <div className="game-over">
-          <h2>Game Over</h2>
-          <p>The right word was: {answerWord}.</p>
-          <button onClick={resetGame}>Play Again</button>
-        </div>
-      )}
+      <GameStatusMessage
+        gameOver={gameOver}
+        gameWon={gameWon}
+        answerWord={answerWord}
+        resetGame={resetGame}
+      />
     </div>
   );
 };

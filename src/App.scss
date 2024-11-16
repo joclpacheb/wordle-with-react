@@ -14,6 +14,13 @@ $text-color-dark: #363636;
   justify-content: center;
   align-items: center;
 
+  .grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   .grid {
     display: grid;
     gap: 5px;
@@ -46,6 +53,7 @@ $text-color-dark: #363636;
           background-color: $incorrect-color;
           color: $text-color;
         }
+
         &.imprecise {
           // Applying styles for "imprecise"
           background-color: $imprecise-color;
@@ -62,5 +70,17 @@ $text-color-dark: #363636;
 
   .inputs-container {
     display: inline;
+  }
+
+  .game-over {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .game-won {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }

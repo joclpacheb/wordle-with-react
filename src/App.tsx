@@ -141,39 +141,48 @@ const WordleGame: React.FC = () => { // (typescript syntax)
   return (
     <div className="wordle">
       <h1>Wordle</h1>
-      <div className="inputs-container">
-        {/* Validation: accepting input that has n°(WORD_LENGTH) letters only from the player */}
-        <input
-          className="input-box"
-          type="text"
-          maxLength={WORD_LENGTH}
-          pattern="[a-zA-Z]*"
-          value={currentInput}
-          onChange={(e) => {
-            const inputValue = e.target.value.replace(/[^a-zA-Z]/g, '');
-            setCurrentInput(inputValue.toUpperCase()); // Validation: Converting user-typed word to uppercase  
-          }}
-        />
-        <button onClick={handleEvaluateClick}>EVALUATE</button>
-      </div>
+
 
       {/* Game Grid */}
       {gameOver === false && gameWon == false && (
-        <div className="grid">
-          {gridData.map((row, attemptIndex) => (
-            <div key={attemptIndex} className="row">
-              {row.map((cell, letterIndex) => (
-                <div
-                  key={letterIndex}
-                  className={`cell ${cell.status}`} // Applying correct/incorrect styling for the cell backgrounds
-                >
-                  {cell.letter}
-                </div>
-              ))}
-            </div>
-          ))}
+        <div className="grid-wrapper">
+          <div className="inputs-container">
+            {/* Validation: accepting input that has n°(WORD_LENGTH) letters only from the player */}
+            <input
+              className="input-box"
+              type="text"
+              maxLength={WORD_LENGTH}
+              pattern="[a-zA-Z]*"
+              value={currentInput}
+              onChange={(e) => {
+                const inputValue = e.target.value.replace(/[^a-zA-Z]/g, '');
+                setCurrentInput(inputValue.toUpperCase()); // Validation: Converting user-typed word to uppercase  
+              }}
+            />
+            <button onClick={handleEvaluateClick}>EVALUATE</button>
+          </div>
+          <div className="grid">
+            {gridData.map((row, attemptIndex) => (
+              <div key={attemptIndex} className="row">
+                {row.map((cell, letterIndex) => (
+                  <div
+                    key={letterIndex}
+                    className={`cell ${cell.status}`} // Applying correct/incorrect styling for the cell backgrounds
+                  >
+                    {cell.letter}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
         </div>
-      )}
+
+      )
+
+
+      }
+
       {/* Game Won/Game Over messages */}
       {gameWon && (
         <div className="game-won">

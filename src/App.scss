@@ -21,6 +21,19 @@
         background-color: #787c7e;
         border-color: #787c7e;
         color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &.correct {
+          // Applying styles for "correct"
+          background-color: #2bec1d;
+        }
+
+        &.incorrect {
+          // Applying styles for "incorrect"
+          background-color: #363636;
+        }
       }
     }
   }
@@ -32,6 +45,5 @@
 
   .inputs-container {
     display: inline;
-
   }
 }

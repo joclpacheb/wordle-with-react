@@ -19,11 +19,8 @@ const ANSWER_WORD_BANK = ["CLOUD", "DREAM", "SWEET", "FLOAT"];
 const MAX_ATTEMPTS = 6;
 const WORD_LENGTH = 5;
 
-// const EMPTY_CELL = "";
-
 // TODO: Implement GameState (typescript)
 // interface GameState { }
-// TODO: Implement the Wordle component
 
 const WordleGame: React.FC = () => { // (typescript syntax)
   const [currentInput, setCurrentInput] = useState("");
@@ -58,7 +55,6 @@ const WordleGame: React.FC = () => { // (typescript syntax)
       return;
     }
 
-
     // For debugging: This logs the player's input and the chosen answer
     console.log("Evaluating the user-typed word:", currentInput);
     console.log("Answer word is:", answerWord);
@@ -70,7 +66,7 @@ const WordleGame: React.FC = () => { // (typescript syntax)
 
       newGridData[activeRow][i] = {
         letter: char,
-        status: isCorrect ? "correct" : "incorrect", // Ternary using "green" and "gray" to match CSS classes for
+        status: isCorrect ? "correct" : "incorrect", // Ternary expression using "correct" and "incorrect", matching CSS classes for "green" and "gray" respectively
       };
     }
 
@@ -109,23 +105,6 @@ const WordleGame: React.FC = () => { // (typescript syntax)
       </div>
 
       {/* Game Grid */}
-
-      {/* Original grid component code as a reference */}
-      {/* <div className="grid"> 
-        {Array(MAX_ATTEMPTS)
-          .fill(null)
-          .map((_, attemptIndex) => (
-            <div key={attemptIndex} className="row">
-              {Array(WORD_LENGTH)
-                .fill(null)
-                .map((letter, letterIndex) => (
-                  <div key={letterIndex} className="cell">
-                    {letter}
-                  </div>
-                ))}
-            </div>
-          ))}
-      </div> */}
       <div className="grid">
         {gridData.map((row, attemptIndex) => (
           <div key={attemptIndex} className="row">

@@ -1,3 +1,13 @@
+$correct-color: #48c53f;
+$incorrect-color: #363636;
+$imprecise-color: #ecf455;
+
+$present-color: #f3c74d;
+$default-background: #787c7e;
+$border-color: #d3d6da;
+$text-color: white;
+$text-color-dark: #363636;
+
 .wordle {
   display: flex;
   flex-direction: column;
@@ -17,22 +27,24 @@
       .cell {
         width: 60px;
         height: 60px;
-        border: 2px solid #d3d6da;
-        background-color: #787c7e;
-        border-color: #787c7e;
-        color: white;
+        border: 2px solid $border-color;
+        background-color: $default-background;
+        border-color: $border-color;
+        color: $text-color;
         display: flex;
         justify-content: center;
         align-items: center;
 
         &.correct {
           // Applying styles for "correct"
-          background-color: #2bec1d;
+          background-color: $correct-color;
+          color: $text-color-dark;
         }
 
         &.incorrect {
           // Applying styles for "incorrect"
-          background-color: #363636;
+          background-color: $incorrect-color;
+          color: $text-color;
         }
       }
     }

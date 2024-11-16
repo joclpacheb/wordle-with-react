@@ -52,11 +52,12 @@ const WordleGame: React.FC = () => { // (typescript syntax)
     // Avoiding direct mutation
     const newGridData = [...gridData];
 
-    //Validation: Checking if the already validated input text is blank
-    if (currentInput === "") {
-      alert("Please enter a word.");
+    //Validation: Checking if the already validated input text by the player is valid
+    if (currentInput.length !== WORD_LENGTH) {
+      alert("Please enter a full " + WORD_LENGTH + "-letter word.");
       return;
     }
+
 
     // For debugging: This logs the player's input and the chosen answer
     console.log("Evaluating the user-typed word:", currentInput);
@@ -88,12 +89,11 @@ const WordleGame: React.FC = () => { // (typescript syntax)
     setCurrentInput("");
   };
 
-
   return (
     <div className="wordle">
       <h1>Wordle</h1>
       <div className="inputs-container">
-        {/* Validation: accepting input that has 5 letters only from the player */}
+        {/* Validation: accepting input that has n°(WORD_LENGTH) letters only from the player */}
         <input
           className="input-box"
           type="text"

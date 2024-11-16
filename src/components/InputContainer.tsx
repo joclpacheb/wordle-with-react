@@ -1,4 +1,17 @@
-const InputContainer = ({ currentInput, setCurrentInput, handleEvaluateClick, WORD_LENGTH }) => {
+
+interface InputContainerProps {
+    currentInput: string; // The current input value (string)
+    setCurrentInput: (input: string) => void; // Function to update the input value
+    handleEvaluateClick: () => void; // Function to handle evaluating the input
+    WORD_LENGTH: number; // The length of the word (number)
+}
+
+const InputContainer: React.FC<InputContainerProps> = ({
+    currentInput,
+    setCurrentInput,
+    handleEvaluateClick,
+    WORD_LENGTH,
+}) => {
     return (
         <div className="inputs-container">
             {/* Validation: accepting input that has n°(WORD_LENGTH) letters only from the player */}

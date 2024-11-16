@@ -1,5 +1,12 @@
 
-const GameStatusMessage = ({ gameOver, gameWon, answerWord, resetGame }) => {
+interface GameStatusMessageProps {
+    gameOver: boolean;
+    gameWon: boolean;
+    answerWord: string;
+    resetGame: () => void;
+}
+
+const GameStatusMessage: React.FC<GameStatusMessageProps> = ({ gameOver, gameWon, answerWord, resetGame }) => {
     return (
         <>
             {gameWon && (

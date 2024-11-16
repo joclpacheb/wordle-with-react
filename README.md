@@ -19,10 +19,10 @@ This small project was created as a coding challenge to practice after a coding 
 
 - **Styling**: The main goal of this challenge was focused on the interactive and functional aspects of the Wordle game rather than the styling of its elements. The stylesheet uses simple styles with Sass and I moved the styles into a single global *styles.scss* file with its respective selectors and style variables.
 
-## Screenshot:
-![Screenshot]("/src/assets/screenshot1.png")
-![Screenshot]("/src/assets/screenshot2.png")
-![Screenshot]("/src/assets/screenshot3.png")
+## Screenshots:
+![Screenshot](/src/assets/screenshot1.png)
+![Screenshot](/src/assets/screenshot2.png)
+![Screenshot](/src/assets/screenshot3.png)
 
 
 ## Game Rules: 

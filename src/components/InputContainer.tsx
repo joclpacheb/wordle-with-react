@@ -12,6 +12,12 @@ const InputContainer = ({ currentInput, setCurrentInput, handleEvaluateClick, WO
                     const inputValue = e.target.value.replace(/[^a-zA-Z]/g, '');
                     setCurrentInput(inputValue.toUpperCase()); // Validation: Converting user-typed word to uppercase  
                 }}
+
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        handleEvaluateClick();
+                    }
+                }}
             />
             <button onClick={handleEvaluateClick}>EVALUATE</button>
         </div>

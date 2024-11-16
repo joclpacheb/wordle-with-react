@@ -1,0 +1,37 @@
+.wordle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .grid {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 30px;
+
+    .row {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+
+      .cell {
+        width: 60px;
+        height: 60px;
+        border: 2px solid #d3d6da;
+        background-color: #787c7e;
+        border-color: #787c7e;
+        color: white;
+      }
+    }
+  }
+
+  .input-box {
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  .inputs-container {
+    display: inline;
+
+  }
+}

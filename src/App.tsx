@@ -26,12 +26,14 @@ const WordleGame: React.FC = () => { // (typescript syntax)
   const [currentInput, setCurrentInput] = useState("");
   const [answerWord, setAnswerWord] = useState(""); // State for the chosen answer word
   const [activeRow, setActiveRow] = useState(0);
+  const [gameOver, setGameOver] = useState(false); // State to track if the game is over
+  const [gameWon, setGameWon] = useState(false); // State to track if the game is won
   const initialGridData = Array.from({ length: MAX_ATTEMPTS }, () =>
     Array.from({ length: WORD_LENGTH }, () => ({ letter: "", status: "" }))
   );
 
   const [gridData, setGridData] = useState(initialGridData);
-  // Function to pick a random word from the word bank upon component initialization
+  // Function to pick a random word from the word bank 
   const pickRandomWord = () => {
     const randomIndex = Math.floor(Math.random() * ANSWER_WORD_BANK.length);
     return ANSWER_WORD_BANK[randomIndex];
@@ -43,8 +45,9 @@ const WordleGame: React.FC = () => { // (typescript syntax)
     console.log("The chosen answer word is:", word); // Debugging log
   }, []);
 
-  // Function to handle the click event of the evaluate button
+  // Function to handle the click event of the EVALUATE button
   const handleEvaluateClick = () => {
+    // if (gameOver || gameWon) return; // Don't evaluate if the game is over or won
 
     // Avoiding direct mutation
     const newGridData = [...gridData];
@@ -66,25 +69,52 @@ const WordleGame: React.FC = () => { // (typescript syntax)
 
       newGridData[activeRow][i] = {
         letter: char,
-        status: isCorrect ? "correct" : "incorrect", // Ternary expression using "correct" and "incorrect", matching CSS classes for "green" and "gray" respectively
+        status: isCorrect ? "correct" : "incorrect", // Match CSS classes for "green" and "gray" if "correct" or "incorrect" respectively
       };
     }
 
     setGridData(newGridData);
-    setCurrentInput(""); // Reset input
+    setCurrentInput(""); // Resets input
+    setGridData(newGridData); // Updates the state with new grid data
 
-    // Updates the state with new grid data
-    setGridData(newGridData);
 
-    // Moves to the next row (TODO: can be expanded later)
+
+    // Checks if the word was guessed correctly
+    if (currentInput === answerWord) {
+      setGameWon(true);
+
+      return; // Skip further evaluation if the game is won
+    }
+
+    // Moves to the next row 
     setActiveRow((prevRow) => prevRow + 1);
 
-    console.log("CurrentRow word is:", activeRow);
+    console.log("Current row is:", activeRow);
 
     // Resets input box
     setCurrentInput("");
+
+    // Checks if the game is over (if the player reached the last row without winning)
+    if (activeRow + 1 >= MAX_ATTEMPTS) {
+      setGridData(newGridData);
+      setGameOver(true);
+      setTimeout(() => {
+
+      }, 100);
+    }
   };
 
+  // Function to reset the game
+  const resetGame = () => {
+    setGameOver(false); // Reset the game over state
+    setGameWon(false); // Reset the game over state
+
+    setActiveRow(0); // Reset active row
+    setGridData(initialGridData); // Reset the grid data
+    setCurrentInput(""); // Clear input box
+    setAnswerWord(pickRandomWord()); // Pick a new word
+    console.log("Game has been reset.");
+  };
   return (
     <div className="wordle">
       <h1>Wordle</h1>
@@ -105,21 +135,37 @@ const WordleGame: React.FC = () => { // (typescript syntax)
       </div>
 
       {/* Game Grid */}
-      <div className="grid">
-        {gridData.map((row, attemptIndex) => (
-          <div key={attemptIndex} className="row">
-            {row.map((cell, letterIndex) => (
-              <div
-                key={letterIndex}
-                className={`cell ${cell.status}`}// Applying correct/incorrect styling for the cell backgrounds
-              >
-                {cell.letter}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-
+      {gameOver === false && gameWon == false && (
+        <div className="grid">
+          {gridData.map((row, attemptIndex) => (
+            <div key={attemptIndex} className="row">
+              {row.map((cell, letterIndex) => (
+                <div
+                  key={letterIndex}
+                  className={`cell ${cell.status}`}// Applying correct/incorrect styling for the cell backgrounds
+                >
+                  {cell.letter}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+      {/* Display Game Over message */}
+      {gameWon && (
+        <div className="game-won">
+          <h2>You Win!</h2>
+          <p>You guessed the right word: ({answerWord}).</p>
+          <button onClick={resetGame}>Play Again</button>
+        </div>
+      )}
+      {gameOver && (
+        <div className="game-over">
+          <h2>Game Over</h2>
+          <p>The right word was: ({answerWord}).</p>
+          <button onClick={resetGame}>Play Again</button>
+        </div>
+      )}
     </div>
   );
 };

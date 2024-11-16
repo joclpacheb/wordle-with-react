@@ -28,16 +28,18 @@ const WordleGame: React.FC = () => { // (typescript syntax)
   const [activeRow, setActiveRow] = useState(0);
   const [gameOver, setGameOver] = useState(false); // State to track if the game is over
   const [gameWon, setGameWon] = useState(false); // State to track if the game is won
+
   const initialGridData = Array.from({ length: MAX_ATTEMPTS }, () =>
     Array.from({ length: WORD_LENGTH }, () => ({ letter: "", status: "" }))
   );
-
   const [gridData, setGridData] = useState(initialGridData);
+
   // Function to pick a random word from the word bank 
   const pickRandomWord = () => {
     const randomIndex = Math.floor(Math.random() * ANSWER_WORD_BANK.length);
     return ANSWER_WORD_BANK[randomIndex];
   };
+
   // Initializing the answer word 
   useEffect(() => {
     const word = pickRandomWord();
@@ -47,12 +49,10 @@ const WordleGame: React.FC = () => { // (typescript syntax)
 
   // Function to handle the click event of the EVALUATE button
   const handleEvaluateClick = () => {
-    // if (gameOver || gameWon) return; // Don't evaluate if the game is over or won
-
     // Avoiding direct mutation
     const newGridData = [...gridData];
 
-    //Validation: Checking if the already validated input text by the player is valid
+    // Validation: Ensures if the (already validated) typed input text is valid
     if (currentInput.length !== WORD_LENGTH) {
       alert("Please enter a full " + WORD_LENGTH + "-letter word.");
       return;
@@ -62,46 +62,67 @@ const WordleGame: React.FC = () => { // (typescript syntax)
     console.log("Evaluating the user-typed word:", currentInput);
     console.log("Answer word is:", answerWord);
 
-    // Fills the active row with user input and sets corresponding class names
+    // FIRST PASS: Mark correct letters (green) and track used letters in answer
+    const answerWordCopy = answerWord.split("");
+    let wordGuessedCorrectly = true; // Flag to track if the word is guessed correctly
+
     for (let i = 0; i < WORD_LENGTH; i++) {
       const char = currentInput[i];
       const isCorrect = char === answerWord[i];
 
       newGridData[activeRow][i] = {
         letter: char,
-        status: isCorrect ? "correct" : "incorrect", // Match CSS classes for "green" and "gray" if "correct" or "incorrect" respectively
+        status: isCorrect ? "correct" : "incorrect", // Correct => green, Incorrect => gray
       };
+
+      if (!isCorrect) wordGuessedCorrectly = false; // Mark flag as false if not correct
+
+      // Remove matched letter from answerWordCopy to avoid double counting for yellow
+      if (isCorrect) {
+        answerWordCopy[i] = ""; // Mark letter as used
+      }
     }
 
-    setGridData(newGridData);
-    setCurrentInput(""); // Resets input
+    // SECOND PASS: Mark imprecise (yellow) letters (right letter, wrong position)
+    for (let i = 0; i < WORD_LENGTH; i++) {
+      const char = currentInput[i];
+      if (newGridData[activeRow][i].status === "incorrect") {
+        // Check if the letter exists in the word but is in the wrong position then it's an imprecise match
+        const indexInAnswer = answerWordCopy.indexOf(char);
+        if (indexInAnswer !== -1) {
+          newGridData[activeRow][i] = {
+            letter: char,
+            status: "imprecise", // Mark as yellow
+          };
+          answerWordCopy[indexInAnswer] = ""; // Remove letter from answerWordCopy to avoid reusing it
+        }
+      }
+    }
+
+    // Updates the grid with new status
     setGridData(newGridData); // Updates the state with new grid data
 
-
-
-    // Checks if the word was guessed correctly
-    if (currentInput === answerWord) {
+    // GAME WON: Checks if the word was guessed correctly
+    if (wordGuessedCorrectly) {
       setGameWon(true);
-
-      return; // Skip further evaluation if the game is won
+      console.log("Game won.");
+      return; // Skip further evaluation to prevent triggering the game over condition
     }
 
-    // Moves to the next row 
-    setActiveRow((prevRow) => prevRow + 1);
-
-    console.log("Current row is:", activeRow);
-
-    // Resets input box
-    setCurrentInput("");
-
-    // Checks if the game is over (if the player reached the last row without winning)
+    // GAMEOVER: Checks if the game is over (if the player reached the last row without winning)
     if (activeRow + 1 >= MAX_ATTEMPTS) {
       setGridData(newGridData);
       setGameOver(true);
-      setTimeout(() => {
-
-      }, 100);
+      console.log("Game Over.");
+      return; // Skip row increment if game is over
     }
+
+    // Moves to the next row
+    setActiveRow((prevRow) => prevRow + 1);
+    console.log("Current row is:", activeRow);
+
+    // Resets input box (this happens last so the game won check can happen before resetting the input)
+    setCurrentInput("");
   };
 
   // Function to reset the game
@@ -115,6 +136,8 @@ const WordleGame: React.FC = () => { // (typescript syntax)
     setAnswerWord(pickRandomWord()); // Pick a new word
     console.log("Game has been reset.");
   };
+
+  // Rendering the game component
   return (
     <div className="wordle">
       <h1>Wordle</h1>
@@ -128,7 +151,7 @@ const WordleGame: React.FC = () => { // (typescript syntax)
           value={currentInput}
           onChange={(e) => {
             const inputValue = e.target.value.replace(/[^a-zA-Z]/g, '');
-            setCurrentInput(inputValue.toUpperCase()); //Validation: Converting user-typed word to uppercase  
+            setCurrentInput(inputValue.toUpperCase()); // Validation: Converting user-typed word to uppercase  
           }}
         />
         <button onClick={handleEvaluateClick}>EVALUATE</button>
@@ -142,7 +165,7 @@ const WordleGame: React.FC = () => { // (typescript syntax)
               {row.map((cell, letterIndex) => (
                 <div
                   key={letterIndex}
-                  className={`cell ${cell.status}`}// Applying correct/incorrect styling for the cell backgrounds
+                  className={`cell ${cell.status}`} // Applying correct/incorrect styling for the cell backgrounds
                 >
                   {cell.letter}
                 </div>
@@ -151,18 +174,18 @@ const WordleGame: React.FC = () => { // (typescript syntax)
           ))}
         </div>
       )}
-      {/* Display Game Over message */}
+      {/* Game Won/Game Over messages */}
       {gameWon && (
         <div className="game-won">
           <h2>You Win!</h2>
-          <p>You guessed the right word: ({answerWord}).</p>
+          <p>You guessed the right word: {answerWord}.</p>
           <button onClick={resetGame}>Play Again</button>
         </div>
       )}
       {gameOver && (
         <div className="game-over">
           <h2>Game Over</h2>
-          <p>The right word was: ({answerWord}).</p>
+          <p>The right word was: {answerWord}.</p>
           <button onClick={resetGame}>Play Again</button>
         </div>
       )}

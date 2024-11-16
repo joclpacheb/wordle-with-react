@@ -46,6 +46,11 @@ $text-color-dark: #363636;
           background-color: $incorrect-color;
           color: $text-color;
         }
+        &.imprecise {
+          // Applying styles for "imprecise"
+          background-color: $imprecise-color;
+          color: $text-color-dark;
+        }
       }
     }
   }

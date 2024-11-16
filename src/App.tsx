@@ -19,25 +19,37 @@ Game Rules:
 const MAX_ATTEMPTS = 6;
 const WORD_LENGTH = 5;
 const ANSWER_WORD_BANK = ["CLOUD", "DREAM", "SWEET", "FLOAT"];
+const EMPTY_CELL = "";
 
-// TODO: Implement GameState
-interface GameState { }
+// TODO: Implement GameState (typescript)
+// interface GameState { }
 
-const WordleGame: React.FC = () => {
+const WordleGame: React.FC = () => { // (typescript syntax)
   // TODO: Implement the Wordle component
-  const [currentInput, setCurrentInput] = React.useState("");
-
+   const [currentInput, setCurrentInput] = React.useState("");
+   const letters = Array(WORD_LENGTH).fill(EMPTY_CELL);
   const onChangeHandler = (e) => {
-    console.log(e.target.value);
-    setCurrentInput(e.target.value);
-  };
+     console.log(e.target.value);
+     setCurrentInput(e.target.value);
+ };
 
-  return (
+    return (
     <div className="wordle">
       <h1>Wordle</h1>
-      <div className="inputs-container">
-        <input className="input-box" onChange={onChangeHandler}></input>
-        <button>EVALUATE</button>
+        <div className="inputs-container">
+          {/* Validated input that only accepts 5 letters from player */}
+          <input 
+            className="input-box"
+            type="text"
+            maxLength={WORD_LENGTH}
+            pattern="[a-zA-Z]*"
+            value={currentInput}
+            onChange={(e) => {
+              const inputValue = e.target.value.replace(/[^a-zA-Z]/g, '');
+              setCurrentInput(inputValue);
+            }}
+          />
+          <button>EVALUATE</button>
       </div>
 
       {/* Game Grid */}
@@ -48,8 +60,10 @@ const WordleGame: React.FC = () => {
             <div key={attemptIndex} className="row">
               {Array(WORD_LENGTH)
                 .fill(null)
-                .map((_, letterIndex) => (
-                  <div key={letterIndex} className="cell" />
+                .map((letter, letterIndex) => (
+                  <div key={letterIndex} className="cell">
+                    {letter}
+                  </div>
                 ))}
             </div>
           ))}

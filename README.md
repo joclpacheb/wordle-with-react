@@ -1,6 +1,6 @@
 # Wordle Clone using React.js 
 
-This small project was created as a coding challenge to practice after a coding interview as an UI engineer at a games studio, held on Nov 15th.
+This small project was created as a coding challenge to practice UI Engineering for videogames.
 
 **Main Goal**: Recreate the functional/interactive aspects from the game programming of Wordle using React.js.
 
@@ -9,7 +9,7 @@ This small project was created as a coding challenge to practice after a coding 
 
 - **Commits and Thought Process**: Continuing from the initial exploration, the commit history in this repository shows my personal thought process of implementing the functional aspects of this game from the original files provided in the challenge. I used [Gitmoji](https://gitmoji.dev/) for my commits.
 
-- **Dynamic Config Values**: For each game session, I decided that one word gets randomly chosen from a bank of words that can be expanded in the (ConfigValues file), the Word length and number of attempts can also be configured in the same file.
+- **Dynamic Configuration Values**: For each game session, I decided that one word gets randomly chosen from a bank of words that can be expanded in the (ConfigValues file), the Word length and number of attempts can also be configured in the same file.
 
 - **Validated Input** The Input element has been validated to only accept letter characters, no spaces and automatically changes the casing (caps) before evaluation for better data consistency.
 
